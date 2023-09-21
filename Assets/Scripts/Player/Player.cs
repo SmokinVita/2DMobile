@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamagable
 {
 
     //get reference to Rigidbody
@@ -14,8 +14,7 @@ public class Player : MonoBehaviour
     private bool _isGrounded = false;
     private bool _resetJumping = false;
 
-    
-
+    public int Health { get; set; }
 
     void Start()
     {
@@ -27,7 +26,7 @@ public class Player : MonoBehaviour
         _anim = GetComponent<PlayerAnimation>();
         if (_anim == null)
             Debug.LogError("Player Animation is NULL!");
-        
+
     }
 
     // Update is called once per frame
@@ -54,7 +53,7 @@ public class Player : MonoBehaviour
             _anim.JumpAnimation(true);
         }
 
-        
+
         _rb2D.velocity = new Vector2(horizontal * _speed, _rb2D.velocity.y);
         _anim.MoveAnimation(horizontal);
     }
@@ -80,5 +79,10 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(.1f);
         _resetJumping = false;
+    }
+
+    public void Damage()
+    {
+        Debug.Log("Player Got hit");
     }
 }

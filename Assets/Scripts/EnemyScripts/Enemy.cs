@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour, IDamagable
+public abstract class Enemy : MonoBehaviour
 {
 
     [SerializeField]
@@ -16,6 +16,10 @@ public abstract class Enemy : MonoBehaviour, IDamagable
 
     protected Animator _anim;
     protected SpriteRenderer _sprite;
+    protected bool _isHit;
+    protected bool _isAlive = true;
+
+    protected Player _player;
 
     public virtual void Init()
     {
@@ -26,6 +30,10 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         if (_sprite == null)
             Debug.LogError($"Sprite Renderer is Null on {this.gameObject.name}");
 
+        _player = GameObject.Find("Player").GetComponent<Player>();
+        if (_player == null)
+            Debug.LogError("Player is NULL!");
+
         _currentTarget = _pointB;
     }
 
@@ -34,19 +42,12 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         Init();
     }
 
-    protected virtual void Attack()
-    {
-
-    }
-
-    public void Damage()
-    {
-        Debug.Log($"My name is {this.gameObject.name}");
-    }
-
     protected virtual void Update()
     {
         if (_anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            return;
+
+        if (_isAlive == false)
             return;
 
         Movement();
@@ -71,7 +72,29 @@ public abstract class Enemy : MonoBehaviour, IDamagable
 
         }
 
+        float distance = Vector2.Distance(transform.position, _player.transform.position);
+        if (distance > 2f)
+        {
+            _isHit = false;
+            _anim.SetBool("InCombat", false);
+        }
 
-        transform.position = Vector2.MoveTowards(transform.position, _currentTarget.position, _speed * Time.deltaTime);
+        if (_isHit == true)
+        {
+            Vector2 direction = _player.transform.localPosition - transform.localPosition;
+            if (direction.x < 0)
+            {
+                _sprite.flipX = true;
+            }
+            else if (direction.x > 0)
+            {
+                _sprite.flipX = false;
+            }
+        }
+
+        if (_isHit == false)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, _currentTarget.position, _speed * Time.deltaTime);
+        }
     }
 }

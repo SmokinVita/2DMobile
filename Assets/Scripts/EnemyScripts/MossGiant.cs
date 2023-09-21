@@ -2,47 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MossGiant : Enemy
+public class MossGiant : Enemy, IDamagable
 {
+    public int Health { get; set; }
 
-   // private SpriteRenderer _sprite;
-    //private Animator _anim;
-
-   /* private void Start()
+    public override void Init()
     {
-        _sprite = GetComponentInChildren<SpriteRenderer>();
-        if (_sprite == null)
-            Debug.LogError("SpriteRenderer is NULL!");
+        base.Init();
+        Health = base._health;
+    }
 
-        _anim = GetComponentInChildren<Animator>();
-        if (_anim == null)
-            Debug.LogError("Animator is NULL!");
-
-        _currentTarget = _pointB;
-    }*/
-
-
-
-   /* private void Movement()
+   public void Damage()
     {
-        if (_currentTarget == _pointA)
-            _sprite.flipX = true;
-        else if (_currentTarget == _pointB)
-            _sprite.flipX = false;
+        Health--;
+        _anim.SetTrigger("Hit");
+        _isHit = true;
+        _anim.SetBool("InCombat", true);
 
-        if (transform.position == _pointA.position)
+        if (Health <= 0)
         {
-            _currentTarget = _pointB;
-            _anim.SetTrigger("Idle");
+            _isAlive = false;
+            _anim.SetTrigger("Death");
+
+            if(!_anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+                Destroy(gameObject);
         }
-        else if (transform.position == _pointB.position)
-        {
-            _currentTarget = _pointA;
-            _anim.SetTrigger("Idle");
-
-        }
-
-
-        transform.position = Vector2.MoveTowards(transform.position, _currentTarget.position, _speed * Time.deltaTime);
-    }*/
+    }
 }

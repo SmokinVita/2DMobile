@@ -2,45 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spider : Enemy
+public class Spider : Enemy, IDamagable
 {
+    [SerializeField] private GameObject _acidPrefab;
+    [SerializeField] private GameObject _spawnPoint;
+    public int Health { get; set; }
 
-    //private Animator _anim;
-    //private SpriteRenderer _sprite;
-
-
-    /*private void Start()
+    public override void Init()
     {
-        _currentTarget = _pointB;
+        base.Init();
+        Health = base._health;
+    }
 
-        _anim = GetComponentInChildren<Animator>();
-        if (_anim == null)
-            Debug.LogError("Animator is NULL!");
-
-        _sprite = GetComponentInChildren<SpriteRenderer>();
-        if (_sprite == null)
-            Debug.LogError("Sprite Renderer is NULL!");
-    }*/
-
-
-    /*private void Movement()
+    protected override void Movement()
     {
-        if (_currentTarget == _pointA)
-            _sprite.flipX = true;
-        else if (_currentTarget == _pointB)
-            _sprite.flipX = false;
+       
+    }
 
-        if(transform.position == _pointA.position)
-        {
-            _currentTarget = _pointB;
-            _anim.SetTrigger("Idle");
-        }
-        else if(transform.position == _pointB.position)
-        {
-            _currentTarget = _pointA;
-            _anim.SetTrigger("Idle");
-        }
+    public void Damage()
+    {
+        Health--;
+    }
 
-        transform.position = Vector2.MoveTowards(transform.position, _currentTarget.position, _speed * Time.deltaTime);
-    }*/
+    public void Attack()
+    {
+        Instantiate(_acidPrefab, _spawnPoint.transform);
+    }
 }

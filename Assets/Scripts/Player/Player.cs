@@ -98,6 +98,5 @@ public class Player : MonoBehaviour, IDamagable
     public void AddDiamonds(int diamondAmount)
     {
         _diamonds += diamondAmount;
-        Debug.Log($"Diamonds: {_diamonds}");
     }
 }

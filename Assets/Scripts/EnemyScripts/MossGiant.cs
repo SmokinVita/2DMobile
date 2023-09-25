@@ -12,8 +12,11 @@ public class MossGiant : Enemy, IDamagable
         Health = base._health;
     }
 
-   public void Damage()
+    public void Damage()
     {
+        if (!_isAlive)
+            return;
+
         Health--;
         _anim.SetTrigger("Hit");
         _isHit = true;
@@ -24,8 +27,16 @@ public class MossGiant : Enemy, IDamagable
             _isAlive = false;
             _anim.SetTrigger("Death");
 
-            if(!_anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
-                Destroy(gameObject);
+            GameObject diamond = Instantiate(_diamondPrefab, transform.position, Quaternion.identity);
+            Diamond setValue = diamond.GetComponent<Diamond>();
+            if (setValue != null)
+            {
+                setValue.DiamonValue(_gemsToDrop);
+            }
+
+
+            Destroy(gameObject, 3f);
         }
+
     }
 }

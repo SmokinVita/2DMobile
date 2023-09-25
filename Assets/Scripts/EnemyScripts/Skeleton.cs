@@ -5,6 +5,7 @@ using UnityEngine;
 public class Skeleton : Enemy, IDamagable
 {
     public int Health { get; set; }
+
     public override void Init()
     {
         base.Init();
@@ -13,6 +14,9 @@ public class Skeleton : Enemy, IDamagable
 
     public void Damage()
     {
+        if (!_isAlive)
+            return;
+
         Health--;
         _anim.SetTrigger("Hit");
         _isHit = true;
@@ -22,8 +26,14 @@ public class Skeleton : Enemy, IDamagable
         {
             _isAlive = false;
             _anim.SetTrigger("Death");
-            if (!_anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
-                Destroy(gameObject, 3f);
+
+            GameObject diamond = Instantiate(_diamondPrefab, transform.position, Quaternion.identity);
+            Diamond setvalue = diamond.GetComponent<Diamond>();
+            if(setvalue != null)
+            {
+                setvalue.DiamonValue(_gemsToDrop);
+            }
+            Destroy(gameObject, 3f);
         }
     }
 

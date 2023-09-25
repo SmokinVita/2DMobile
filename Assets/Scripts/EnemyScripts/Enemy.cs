@@ -12,6 +12,8 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField]
     protected int _gemsToDrop;
     [SerializeField]
+    protected GameObject _diamondPrefab;
+    [SerializeField]
     protected Transform _pointA, _pointB, _currentTarget;
 
     protected Animator _anim;

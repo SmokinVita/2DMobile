@@ -14,6 +14,9 @@ public class Player : MonoBehaviour, IDamagable
     private bool _isGrounded = false;
     private bool _resetJumping = false;
 
+    //diamonds
+    [SerializeField] private int _diamonds;
+
     public int Health { get; set; }
 
     void Start()
@@ -84,5 +87,17 @@ public class Player : MonoBehaviour, IDamagable
     public void Damage()
     {
         Debug.Log("Player Got hit");
+        _anim.Hit();
+
+        if (Health <= 0)
+        {
+            _anim.Death();
+        }
+    }
+
+    public void AddDiamonds(int diamondAmount)
+    {
+        _diamonds += diamondAmount;
+        Debug.Log($"Diamonds: {_diamonds}");
     }
 }

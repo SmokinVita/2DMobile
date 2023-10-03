@@ -28,10 +28,10 @@ public class Skeleton : Enemy, IDamagable
             _anim.SetTrigger("Death");
 
             GameObject diamond = Instantiate(_diamondPrefab, transform.position, Quaternion.identity);
-            Diamond setvalue = diamond.GetComponent<Diamond>();
-            if(setvalue != null)
+            Diamond diamonValue = diamond.GetComponent<Diamond>();
+            if(diamonValue != null)
             {
-                setvalue.DiamonValue(_gemsToDrop);
+                diamonValue.DiamonValue(_gemsToDrop);
             }
             Destroy(gameObject, 3f);
         }

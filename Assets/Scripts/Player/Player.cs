@@ -18,6 +18,7 @@ public class Player : MonoBehaviour, IDamagable
     [SerializeField] private int _diamonds;
 
     public int Health { get; set; }
+    private int _maxHealth = 4;
 
     void Start()
     {
@@ -30,6 +31,8 @@ public class Player : MonoBehaviour, IDamagable
         if (_anim == null)
             Debug.LogError("Player Animation is NULL!");
 
+        Health = 4;
+        UIManager.Instance.UpdateDiamondAmount(_diamonds);
     }
 
     // Update is called once per frame
@@ -41,7 +44,6 @@ public class Player : MonoBehaviour, IDamagable
         {
             _anim.AttackAnimation();
         }
-
     }
 
     private void Movement()
@@ -88,6 +90,9 @@ public class Player : MonoBehaviour, IDamagable
     {
         Debug.Log("Player Got hit");
         _anim.Hit();
+        Health--;
+        //update UIDisplay
+        UIManager.Instance.UpdateLives(Health);
 
         if (Health <= 0)
         {
@@ -98,5 +103,17 @@ public class Player : MonoBehaviour, IDamagable
     public void AddDiamonds(int diamondAmount)
     {
         _diamonds += diamondAmount;
+        UIManager.Instance.UpdateDiamondAmount(_diamonds);
+    }
+
+    public int CurrentDiamonds()
+    {
+        return _diamonds;
+    }
+
+    public void SubtractDiamonds(int diamondAmount)
+    {
+        _diamonds -= diamondAmount;
+        UIManager.Instance.UpdateDiamondAmount(_diamonds);
     }
 }

@@ -18,7 +18,7 @@ public class Player : MonoBehaviour, IDamagable
     [SerializeField] private int _diamonds;
 
     public int Health { get; set; }
-    private int _maxHealth = 4;
+    private bool _isAlive = true;
 
     void Start()
     {
@@ -38,6 +38,10 @@ public class Player : MonoBehaviour, IDamagable
     // Update is called once per frame
     void Update()
     {
+        if (_isAlive == false)
+            return;
+        
+
         Movement();
 
         if (Input.GetMouseButtonDown(0) && IsGrounded())
@@ -88,6 +92,9 @@ public class Player : MonoBehaviour, IDamagable
 
     public void Damage()
     {
+        if(_isAlive == false)
+            return;
+
         Debug.Log("Player Got hit");
         _anim.Hit();
         Health--;
@@ -96,6 +103,7 @@ public class Player : MonoBehaviour, IDamagable
 
         if (Health <= 0)
         {
+            _isAlive = false;
             _anim.Death();
         }
     }

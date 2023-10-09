@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class Player : MonoBehaviour, IDamagable
 {
@@ -44,7 +45,7 @@ public class Player : MonoBehaviour, IDamagable
 
         Movement();
 
-        if (Input.GetMouseButtonDown(0) && IsGrounded())
+        if (CrossPlatformInputManager.GetButtonDown("A_Button") && IsGrounded())
         {
             _anim.AttackAnimation();
         }
@@ -52,9 +53,9 @@ public class Player : MonoBehaviour, IDamagable
 
     private void Movement()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
+        float horizontal = CrossPlatformInputManager.GetAxisRaw("Horizontal");
         _isGrounded = IsGrounded();
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded() == true)
+        if ((Input.GetKeyDown(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("B_Button")) && IsGrounded() == true)
         {
             _rb2D.velocity = new Vector2(_rb2D.velocity.x, _jumpForce);
             _resetJumping = true;

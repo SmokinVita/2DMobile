@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class Shop : MonoBehaviour
 {
@@ -12,9 +13,11 @@ public class Shop : MonoBehaviour
     private Player _player;
     private bool _isInShop;
 
+    [SerializeField] private AdsManager _adsManager;
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && _isInShop == true)
+        if ((Input.GetKeyDown(KeyCode.E) || CrossPlatformInputManager.GetButtonDown("A_Button")) && _isInShop == true)
         {
             UIManager.Instance.ShowShopMenu(true);
         }

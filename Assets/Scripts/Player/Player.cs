@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class Player : MonoBehaviour, IDamagable
@@ -17,8 +18,10 @@ public class Player : MonoBehaviour, IDamagable
 
     //diamonds
     [SerializeField] private int _diamonds;
+    private Vector2 _respawnLocation;
 
     public int Health { get; set; }
+    [SerializeField] private int _maxHealth = 4;
     private bool _isAlive = true;
 
     void Start()
@@ -34,6 +37,8 @@ public class Player : MonoBehaviour, IDamagable
 
         Health = 4;
         UIManager.Instance.UpdateDiamondAmount(_diamonds);
+
+        _respawnLocation = transform.position;
     }
 
     // Update is called once per frame
@@ -41,9 +46,13 @@ public class Player : MonoBehaviour, IDamagable
     {
         if (_isAlive == false)
             return;
-        
 
         Movement();
+
+        if (Keyboard.current.hKey.wasPressedThisFrame)
+        {
+            Heal();
+        }
 
         if (CrossPlatformInputManager.GetButtonDown("A_Button") && IsGrounded())
         {
@@ -55,9 +64,14 @@ public class Player : MonoBehaviour, IDamagable
     {
         float horizontal = CrossPlatformInputManager.GetAxisRaw("Horizontal");
         _isGrounded = IsGrounded();
+
         if ((Input.GetKeyDown(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("B_Button")) && IsGrounded() == true)
         {
-            _rb2D.velocity = new Vector2(_rb2D.velocity.x, _jumpForce);
+            if(GameManager.Instance._hasBootsOfFlight)
+                _rb2D.velocity = new Vector2(_rb2D.velocity.x, _jumpForce + 2);
+            else
+                _rb2D.velocity = new Vector2(_rb2D.velocity.x, _jumpForce);
+
             _resetJumping = true;
             StartCoroutine(ResetJumpingRoutine());
             _anim.JumpAnimation(true);
@@ -112,6 +126,7 @@ public class Player : MonoBehaviour, IDamagable
     public void AddDiamonds(int diamondAmount)
     {
         _diamonds += diamondAmount;
+        Debug.Log("God Diamonds");
         UIManager.Instance.UpdateDiamondAmount(_diamonds);
     }
 
@@ -124,5 +139,28 @@ public class Player : MonoBehaviour, IDamagable
     {
         _diamonds -= diamondAmount;
         UIManager.Instance.UpdateDiamondAmount(_diamonds);
+    }
+
+    public void Respawn()
+    {
+        _anim.Fell();
+        transform.position = _respawnLocation;
+    }
+
+    public void SetRespawnLocation(Vector2 newPos)
+    {
+        _respawnLocation = newPos;
+    }
+
+    public void Heal()
+    {
+        Debug.Log("Heal was called");
+        if (Health >= _maxHealth)
+            return;
+
+        Debug.Log("Not Max Health");
+        Health++;
+        UIManager.Instance.Heal(Health-1);
+        Debug.Log("Healed");
     }
 }

@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _inGameDiamondAmountText;
     [SerializeField] private Image _selectionImage;
     [SerializeField] private Image[] _healthUnits;
+    [SerializeField] private TMP_Text _openchestText;
 
     private void Awake()
     {
@@ -51,6 +52,16 @@ public class UIManager : MonoBehaviour
         _selectionImage.rectTransform.localPosition = new Vector3(_selectionImage.rectTransform.localPosition.x, yPos);
     }
 
+    public void EnableChestText()
+    {
+        _openchestText.gameObject.SetActive(true);
+    }
+
+    public void DisableChestText()
+    {
+        _openchestText.gameObject.SetActive(false);
+    }
+
     public void UpdateLives(int livesRemaining)
     {
         for (int i = 0; i < _healthUnits.Length; i++)
@@ -61,12 +72,12 @@ public class UIManager : MonoBehaviour
     }
 
     //maybe use later
-    //public void Heal(int livesRegained)
-    //{
-    //    for (int i = 0; i < _healthUnits.Length; i++)
-    //    {
-    //        if(i == livesRegained)
-    //            _healthUnits[i].enabled = true;
-    //    }
-    //}
+    public void Heal(int livesRegained)
+    {
+        for (int i = 0; i < _healthUnits.Length; i++)
+        {
+            if (i == livesRegained)
+                _healthUnits[i].enabled = true;
+        }
+    }
 }

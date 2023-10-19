@@ -17,12 +17,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool _hasFlamingSword {  get; set; }
+    public bool _hasFlamingSword { get; set; }
+    [SerializeField]
     public bool _hasBootsOfFlight { get; set; }
     public bool _hasCastleKey { get; set; }
+
+    public Player player { get; private set; }
 
     private void Awake()
     {
         _instance = this;
+
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 }

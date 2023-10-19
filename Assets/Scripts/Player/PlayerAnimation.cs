@@ -61,8 +61,13 @@ public class PlayerAnimation : MonoBehaviour
 
     public void AttackAnimation()
     {
-        _anim.SetTrigger("Attack");
-        _arcAnimatior.SetTrigger("SwordAnimation");
+        if (GameManager.Instance._hasFlamingSword == true)
+            _anim.SetTrigger("FlameAttack");
+        else
+        {
+            _anim.SetTrigger("Attack");
+            _arcAnimatior.SetTrigger("SwordAnimation");
+        }
     }
 
     public void Hit()
@@ -73,5 +78,10 @@ public class PlayerAnimation : MonoBehaviour
     public void Death()
     {
         _anim.SetTrigger("Death");
+    }
+
+    public void Fell()
+    {
+        _anim.SetTrigger("Fell");
     }
 }
